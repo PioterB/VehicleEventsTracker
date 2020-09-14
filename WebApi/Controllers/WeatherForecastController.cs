@@ -17,10 +17,12 @@ namespace WebApi.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ITimeHolder _timeHolder;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ITimeHolder timeHolder)
         {
             _logger = logger;
+            _timeHolder = timeHolder;
         }
 
         [HttpGet]
@@ -29,7 +31,7 @@ namespace WebApi.Controllers
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
-                Date = DateTime.Now.AddDays(index),
+                Date = _timeHolder.RequestTime,
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
